@@ -1,0 +1,127 @@
+<html>
+  <head>
+    <title>A Lexical Sample Demo</title>
+    <style>
+      .editor-container {
+        margin: 0px auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .editor-inner {
+        background: #fff;
+        position: relative;
+      }
+      .editor-input {
+        min-height: 150px;
+        resize: none;
+        font-size: 16px;
+        position: relative;
+        tab-size: 1;
+        outline: 0;
+        padding: 15px 10px;
+        caret-color: #444;
+      }
+      .editor-input p {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>A Lexical Sample Demo</h1>
+    <div class="intro">
+      <p>
+        Lexical is an extensible JavaScript web text-editor framework with an
+        emphasis on reliability, accessibility, and performance. Lexical aims to
+        provide a best-in-class developer experience, so you can easily
+        prototype and build features with confidence. Combined with a highly
+        extensible architecture, Lexical allows developers to create unique text
+        editing experiences that scale in size and functionality.
+      </p>
+    </div>
+    <div style="color: gray">
+      editor instances that each attach to a single content editable element.
+    </div>
+    <div style="color: gray">&lt;div id="editor" contenteditable&gt;</div>
+    <div style="display: flex; gap: 20px; margin: 20px 0">
+      <div class="editor-container" style="flex: 1">
+        <div class="editor-inner">
+          <div id="editor" class="editor-input" contenteditable="true"></div>
+        </div>
+      </div>
+      <div style="flex: 1">
+        <div style="font-size: 1.2em; font-weight: bold; margin-bottom: 5px">
+          Editor State
+        </div>
+        <div style="color: gray">
+          With Lexical, the source of truth is not the DOM, but rather an
+          underlying state model that Lexical maintains and associates with an
+          editor instance.
+        </div>
+        <div>current state</div>
+        <div id="editor-state-current"></div>
+        <div>pending state</div>
+        <div id="editor-state-pending" style="color: gray"></div>
+      </div>
+    </div>
+    <div style="color: gray">&lt;/div&gt;</div>
+    <div style="color: gray">
+      Once you have an editor instance, when ready, you can associate the editor
+      instance with a content editable &lt;div&gt; element.
+    </div>
+    <script type="module">
+      import * as lexical from "https://cdn.skypack.dev/lexical";
+
+      const editor = lexical.createEditor({
+        namespace: "lexical-sample-demo",
+        onError: (error) => {
+          console.error(error);
+        },
+      });
+
+      const currentStatePanel = document.getElementById("editor-state-current");
+      const pendingStatePanel = document.getElementById("editor-state-pending");
+
+      editor.registerUpdateListener(({ editorState }) => {
+        currentStatePanel.innerHTML = JSON.stringify(
+          editorState.toJSON(),
+          null,
+          2
+        );
+        pendingStatePanel.innerHTML = null;
+      });
+
+      // Once you have an editor instance, when ready, you can associate the editor instance with a content editable <div> element in your document:
+      editor.setRootElement(document.getElementById("editor"));
+      editor.registerCommand(
+        lexical.CONTROLLED_TEXT_INSERTION_COMMAND,
+        (eventOrText) => {
+          const selection = lexical.$getSelection();
+
+          if (!lexical.$isRangeSelection(selection)) {
+            return false;
+          }
+
+          if (typeof eventOrText === "string") {
+            selection.insertText(eventOrText);
+          } else {
+            const dataTransfer = eventOrText.dataTransfer;
+
+            if (dataTransfer != null) {
+              console.log("dataTransfer", dataTransfer);
+            } else {
+              const data = eventOrText.data;
+
+              if (data) {
+                selection.insertText(data);
+              }
+            }
+          }
+
+          return true;
+        },
+        lexical.COMMAND_PRIORITY_EDITOR
+      );
+    </script>
+  </body>
+</html>
