@@ -1,7 +1,9 @@
+import LexicalComposer from "./LexicalComposer";
+
 export default function App() {
   return (
-    <div>
-      <h1>Hello World</h1>
-    </div>
+    <LexicalComposer initialConfig={{ namespace: 'mini-editor', editable: true, onError: () => { console.log('init editor error') } }}>
+
+    </LexicalComposer>
   );
 }
