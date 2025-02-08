@@ -4,16 +4,22 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import FloatingMenuPlugin from "./FloatingMenuPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import DraggableBlockPlugin from "./DraggableBlockPlugin";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function App() {
   const floatingAnchorElem = useRef<HTMLDivElement>(null);
+  const [anchor, setAnchor] = useState<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    if (floatingAnchorElem.current) {
+      setAnchor(floatingAnchorElem.current);
+    }
+  }, []);
+  
   return (
     <div className="bg-zinc-100 p-[100px] h-screen">
       <div className="border-2 border-zinc-950 bg-white min-h-[300px] p-[10px] rounded-lg">
         <div className="px-[5px] overflow-y-auto">
-
           <LexicalComposer initialConfig={
               { 
                 namespace: 'mini-editor', 
@@ -34,16 +40,16 @@ export default function App() {
           >
             <RichTextPlugin
                 contentEditable={
-                  <div>
-                    <div ref={floatingAnchorElem}>
+                  <div className="relative">
+                    <div className="relative" ref={floatingAnchorElem}>
                       <ContentEditable className="focus:outline-none focus:ring-0 focus:border-none p-[2px]"/>
                     </div>
                   </div>
                 }
                 ErrorBoundary={LexicalErrorBoundary}
               />
+            {anchor && <DraggableBlockPlugin anchorElem={anchor} /> }
             <FloatingMenuPlugin />
-            <DraggableBlockPlugin anchorElem={floatingAnchorElem.current ?? document.body} />
           </LexicalComposer>
         </div>
       </div>
