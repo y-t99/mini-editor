@@ -54,8 +54,10 @@ export function FloatingMenu(props: FloatingMenuProps & { ref: React.Ref<HTMLDiv
     return (
       <div
         ref={ref}
-        className="flex items-center justify-between bg-slate-100 border-[1px] border-slate-300 rounded-md p-1 gap-1"
+        className="flex items-center justify-between bg-white border-[1px] border-zinc-950 rounded-md p-1 gap-1"
         aria-hidden={!shouldShow}
+
+
         style={{
           position: "absolute",
           top: coords?.y,

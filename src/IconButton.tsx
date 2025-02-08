@@ -162,8 +162,8 @@ export function IconButton({
           props.disabled
             ? `bg-slate-50 text-slate-400`
             : active
-            ? `bg-slate-100 text-slate-900 hover:bg-slate-200 hover:text-slate-900 cursor-pointer`
-            : `bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900 cursor-pointer`
+            ? `bg-white text-zinc-950 hover:bg-zinc-950 hover:text-white cursor-pointer`
+            : `bg-white text-zinc-950 hover:bg-zinc-950 hover:text-white cursor-pointer`
         }`
       }
     >
