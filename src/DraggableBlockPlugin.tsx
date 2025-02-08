@@ -23,13 +23,13 @@ export default function DraggableBlockPlugin({
       menuComponent={
         <div
           ref={menuRef}
-          className="rounded-sm px-2 py-1 cursor-grab bg-black absolute left-0 top-0 will-change-transform"
+          className="rounded-sm px-[2px] py-[4px] cursor-grab opacity-0 absolute left-0 top-0 will-change-transform"
         >
-          <GripVertical className="w-16px h-16px opacity-30" />
+          <GripVertical className="w-[16px] h-[16px] opacity-30" />
         </div>
       }
       targetLineComponent={
-        <div ref={targetLineRef} className="pointer-events-none bg-zinc-950 h-1 absolute left-0 top-0 opacity-0 will-change-transform"/>
+        <div ref={targetLineRef} className="pointer-events-none bg-zinc-950 h-[4px] absolute -left-20 top-0 opacity-0 will-change-transform"/>
       }
       isOnMenu={isOnMenu}
     />

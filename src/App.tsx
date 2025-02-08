@@ -19,7 +19,7 @@ export default function App() {
   return (
     <div className="bg-zinc-100 p-[100px] h-screen">
       <div className="border-2 border-zinc-950 bg-white min-h-[300px] p-[10px] rounded-lg">
-        <div className="px-[5px] overflow-y-auto">
+        <div className="py-[5px] overflow-y-auto">
           <LexicalComposer initialConfig={
               { 
                 namespace: 'mini-editor', 
@@ -40,8 +40,8 @@ export default function App() {
           >
             <RichTextPlugin
                 contentEditable={
-                  <div className="relative">
-                    <div className="relative" ref={floatingAnchorElem}>
+                  <div>
+                    <div className="relative pl-[25px]" ref={floatingAnchorElem}>
                       <ContentEditable className="focus:outline-none focus:ring-0 focus:border-none p-[2px]"/>
                     </div>
                   </div>
