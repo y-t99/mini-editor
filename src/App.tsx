@@ -3,8 +3,12 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import FloatingMenuPlugin from "./FloatingMenuPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import DraggableBlockPlugin from "./DraggableBlockPlugin";
+import { useRef } from "react";
 
 export default function App() {
+  const floatingAnchorElem = useRef<HTMLDivElement>(null);
+
   return (
     <div className="bg-zinc-100 p-[100px] h-screen">
       <div className="border-2 border-zinc-950 bg-white min-h-[300px] p-[10px] rounded-lg">
@@ -29,10 +33,17 @@ export default function App() {
             }
           >
             <RichTextPlugin
-                contentEditable={<ContentEditable className="focus:outline-none focus:ring-0 focus:border-none p-[2px]"/>}
+                contentEditable={
+                  <div>
+                    <div ref={floatingAnchorElem}>
+                      <ContentEditable className="focus:outline-none focus:ring-0 focus:border-none p-[2px]"/>
+                    </div>
+                  </div>
+                }
                 ErrorBoundary={LexicalErrorBoundary}
               />
             <FloatingMenuPlugin />
+            <DraggableBlockPlugin anchorElem={floatingAnchorElem.current ?? document.body} />
           </LexicalComposer>
         </div>
       </div>
