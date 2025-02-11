@@ -5,6 +5,8 @@ import FloatingMenuPlugin from "./FloatingMenuPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import DraggableBlockPlugin from "./DraggableBlockPlugin";
 import { useEffect, useRef, useState } from "react";
+import AutocompletePlugin from "./AutocompletePlugin";
+import { AutocompleteNode } from "./AutocompleteNode";
 
 export default function App() {
   const floatingAnchorElem = useRef<HTMLDivElement>(null);
@@ -34,7 +36,8 @@ export default function App() {
                     underlineStrikethrough: "underlined-line-through",
                     code: "bg-gray-100 dark:bg-gray-800 rounded-md p-2 text-sm",
                   },
-                } 
+                },
+                nodes: [AutocompleteNode]
               }
             }
           >
@@ -50,6 +53,7 @@ export default function App() {
               />
             {anchor && <DraggableBlockPlugin anchorElem={anchor} /> }
             <FloatingMenuPlugin />
+            <AutocompletePlugin />
           </LexicalComposer>
         </div>
       </div>

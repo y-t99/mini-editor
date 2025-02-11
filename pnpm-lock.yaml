@@ -17,6 +17,9 @@ importers:
       '@lexical/rich-text':
         specifier: ^0.24.0
         version: 0.24.0
+      '@lexical/selection':
+        specifier: ^0.24.0
+        version: 0.24.0
       lexical:
         specifier: ^0.23.1
         version: 0.23.1
