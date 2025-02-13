@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $addUpdateTag, $createTextNode, $setSelection, KEY_TAB_COMMAND, COMMAND_PRIORITY_LOW, KEY_ARROW_RIGHT_COMMAND, TextNode } from "lexical";
+import { $createTextNode, $setSelection, KEY_TAB_COMMAND, COMMAND_PRIORITY_LOW, KEY_ARROW_RIGHT_COMMAND, TextNode } from "lexical";
 import { $isAtNodeEnd } from "@lexical/selection";
 import { $getNodeByKey, $getSelection, $isRangeSelection, $isTextNode, BaseSelection, NodeKey } from "lexical";
 import { useEffect } from "react";
@@ -18,6 +18,20 @@ export const uuid = Math.random()
   .replace(/[^a-z]+/g, '')
   .substring(0, 5);
 
+/**
+ * todo lookup should be custom
+ * 
+ * 1. no matching text
+ * 1.1 editor lose focus
+ * 1.2 no range selection
+ * 1.3 is text
+ * 1.4 is no text node
+ * 1.5 is no simple text
+ * 1.6 current cursor is not at node end in ancestor
+ * 1.7 not empty text
+ * @param selection 
+ * @returns 
+ */
 function $search(selection: null | BaseSelection): [boolean, string] {
   if (!$isRangeSelection(selection) || !selection.isCollapsed()) {
     return [false, ''];
@@ -244,53 +258,41 @@ export function AutocompletePlugin() {
       }
       return false;
     }
-    function handleSwipeRight(_force: number, e: TouchEvent) {
-      editor.update(() => {
-        if ($handleAutocompleteIntent()) {
-          e.preventDefault();
-        } else {
-          $addUpdateTag(HISTORY_MERGE.tag);
-        }
-      });
-    }
+
     function unmountSuggestion() {
       editor.update(() => {
         $clearSuggestion();
       }, HISTORY_MERGE);
     }
-    function addSwipeRightListener(
-      element: HTMLElement,
-      cb: (_force: number, e: TouchEvent) => void,
-    ) {
-      return addListener(element, (force, e) => {
-        const [x, y] = force;
-        if (x > 0 && x > Math.abs(y)) {
-          cb(x, e);
-        }
-      });
-    }
 
-    const rootElem = editor.getRootElement();
-
-    editor.registerNodeTransform(
+    // listen autocomplete node created/updated
+    // clear current session user old autocomplete node
+    const unRegisterNodeTransform = editor.registerNodeTransform(
       AutocompleteNode,
       $handleAutocompleteNodeTransform,
     );
-    editor.registerUpdateListener(handleUpdate);
-    editor.registerCommand(
+    // listen update node updated
+    // update matching text and suggestion
+    // update node
+    const unRegisterUpdateListener = editor.registerUpdateListener(handleUpdate);
+    const unTabCommandListener = editor.registerCommand(
       KEY_TAB_COMMAND,
       $handleKeypressCommand,
       COMMAND_PRIORITY_LOW,
     );
-    editor.registerCommand(
+    const unArrowRightCommandListener = editor.registerCommand(
       KEY_ARROW_RIGHT_COMMAND,
       $handleKeypressCommand,
       COMMAND_PRIORITY_LOW,
     );
-    if (rootElem !== null) {
-      addSwipeRightListener(rootElem, handleSwipeRight);
+
+    return () => {
+      unRegisterNodeTransform();
+      unRegisterUpdateListener();
+      unTabCommandListener();
+      unArrowRightCommandListener();
+      unmountSuggestion();
     }
-    unmountSuggestion();
   }, [editor, textAutocompleteFn]);
 
   return null;

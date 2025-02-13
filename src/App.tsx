@@ -28,6 +28,7 @@ export default function App() {
                 editable: true, 
                 onError: () => { console.log('init editor error') }, 
                 theme: {
+                  autocomplete: 'text-zinc-300',
                   text: {
                     bold: "font-semibold",
                     underline: "underline decoration-wavy",
