@@ -1,6 +1,17 @@
 # mini-editor
 
-the editor based on lexical
+the editor based on lexical.
+
+## Project Overview: Lexical-based Rich Text Editor
+
+![project-overview](./project-overview.png)
+
+### Features
+
+- Rich text formatting
+- Floating format toolbar
+- Block element drag-and-drop
+- Autocomplete suggestions
 
 ## Development
 
@@ -8,7 +19,15 @@ the editor based on lexical
 npm run start:dev
 ```
 
-## Lexical
+
+### Tech Stack
+
+- Core Framework: React + Lexical
+- Build Tool: Webpack
+- Styling: Tailwind CSS
+- Component Library: Floating UI + Lucide
+
+### Lexical
 
 How lexical works: 
 
